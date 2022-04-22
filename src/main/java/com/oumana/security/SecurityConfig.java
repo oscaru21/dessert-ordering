@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.oumana.repository.UserRepo;
 
@@ -24,6 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	public SecurityConfig(UserRepo userRepo) {
 		this.userRepo = userRepo;
+	}
+	
+	@Bean
+	JwtAuthenticationFilter jwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
 	}
 
 	@Bean
@@ -61,9 +70,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// login and register endpoints
 			.antMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/menu-items").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/menu-items/**").permitAll()
+			.antMatchers(HttpMethod.POST, "/api/menu-items").hasRole("ADMIN")
+			.antMatchers("/api/menu-items/**/item-reviews").permitAll()
 			.anyRequest().authenticated();
 		
 		//JWT token filter
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
 		
 	}
 
@@ -73,4 +88,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				username -> userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found")))
 				.passwordEncoder(passwordEncoder());
 	}
+	
 }

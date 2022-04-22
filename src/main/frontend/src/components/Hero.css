@@ -1,0 +1,40 @@
+.hero {
+	height: 70vh;
+	box-sizing: border-box;
+	color: white;
+	background: url(https://www.madhatterbakeshop.com/wp-content/uploads/2018/06/MadHatters_Photo1_Cafe_Selects-0318.jpg) center center no-repeat;
+	background-size: cover;
+}
+
+.hero-overlay{
+    display: flex;
+	flex-direction: column;
+	justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    background-color: rgba(0,0,0,0.2);
+    height: 100%;
+    width: 100%;
+    padding: 5em 3em;
+}
+
+.hero-header mark {
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.hero-header h1 mark{
+    font-family: 'Permanent Marker', cursive;
+    font-weight: 600;
+    font-size: 70px;
+}
+
+.hero-footer ul{
+    display: flex;
+}
+
+.hero-footer li{
+    font-size: 14px;
+    padding: 0 2em 0 0;
+}

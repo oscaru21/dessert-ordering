@@ -5,17 +5,27 @@ public class UserDto {
 	private String username;
 	private String email;
 	private String token;
+	private Boolean isAdmin;
 	
 	public UserDto() {
 		super();
 	}
 
-	public UserDto(String name, String username, String email, String token) {
+	public UserDto(String name, String username, String email, String token, Boolean isAdmin) {
 		super();
 		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.token = token;
+		this.isAdmin = isAdmin;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 	public String getName() {
