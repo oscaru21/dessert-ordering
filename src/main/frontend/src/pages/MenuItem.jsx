@@ -6,9 +6,11 @@ import {
   createItemReview,
   reset as reviewsReset,
 } from "../features/itemReviews/itemReviewSlice";
+import { addItem } from "../features/cart/cartSlice";
 import { FaPlus } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 import Spinner from "../components/Spinner";
+import NumberChanger from "../components/NumberChanger";
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
 import ReviewItem from "../components/ReviewItem";
@@ -17,10 +19,12 @@ import { toast } from "react-toastify";
 const customStyles = {
   content: {
     width: "80%",
+    maxWidth: "800px",
     top: "50%",
     left: "50%",
     right: "auto",
     bottom: "auto",
+    
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     position: "relative",
@@ -39,8 +43,11 @@ function MenuItem() {
 
   const { user } = useSelector((state) => state.auth);
 
+  const { cartItems } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const { menuItemId } = useParams();
+  const cartItem = cartItems.find((item) => item.id == menuItemId);
 
   const { imgUrl, name, description, price } = menuItem || {};
 
@@ -65,7 +72,7 @@ function MenuItem() {
   const onSubmitReview = (e) => {
     e.preventDefault();
 
-    dispatch(createItemReview({menuItemId, text: reviewText}));
+    dispatch(createItemReview({ menuItemId, text: reviewText }));
     closeModal();
   };
 
@@ -75,7 +82,7 @@ function MenuItem() {
 
   return (
     <div>
-      <div className="menu-item-page">
+      <div className="page">
         <div className="menu-item-header">
           <BackButton url="/" />
         </div>
@@ -94,24 +101,42 @@ function MenuItem() {
 
               <div className="menu-item-price">
                 <p>${price}</p>
-                <div className="btn btn-secondary">Add to Cart</div>
+                {user && (
+                  <>
+                    {cartItem ? (
+                      <NumberChanger
+                        id={parseInt(menuItemId)}
+                        currentNumber={cartItem.qty}
+                      />
+                    ) : (
+                      <button
+                        className="btn btn-secondary"
+                        onClick={() => dispatch(addItem(menuItem))}
+                      >
+                        Add to Cart
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
 
         <div className="reviews">
-          {user && <button onClick={openModal} className="btn">
-            <FaPlus /> Add Review
-          </button>}
-          
+          {user && (
+            <button onClick={openModal} className="btn">
+              <FaPlus /> Add Review
+            </button>
+          )}
+
           <h2>Reviews</h2>
         </div>
 
         <Modal
           isOpen={modalIsOpen}
           style={customStyles}
-          contentLabel="Add Note"
+          contentLabel="Add Review"
           onRequestClose={closeModal}
           ariaHideApp={false}
         >

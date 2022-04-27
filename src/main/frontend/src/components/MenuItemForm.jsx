@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {createMenuItem, reset} from '../features/menuItems/menuItemSlice'
 import Spinner from './Spinner'
+import FileUploader from './FileUploader'
 
 function MenuItemForm() {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ function MenuItemForm() {
         imgUrl: '',
         price: '',
     })
+    const [file, setFile] = useState(null)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -47,6 +49,7 @@ function MenuItemForm() {
         description,
         imgUrl,
         price,
+        file,
       };
 
       dispatch(createMenuItem(menuItemData));
@@ -112,6 +115,8 @@ function MenuItemForm() {
               required
             />
           </div>
+          <FileUploader onFileSelect={(file) => setFile(file)}/>
+          
           <div className="form-group">
             <button className="btn btn-block">Submit</button>
           </div>

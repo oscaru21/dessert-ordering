@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaSignInAlt } from "react-icons/fa";
-import { login, reset } from '../features/auth/authSlice'
-import Spinner from '../components/Spinner'
-
+import { login, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -13,25 +12,25 @@ function Login() {
     password: "",
   });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { username, password } = formData;
 
   const dispatch = useDispatch();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
-   (state) => state.auth
+    (state) => state.auth
   );
 
   useEffect(() => {
-      if(isError){
-          toast.error(message)
-      }
+    if (isError) {
+      toast.error(message);
+    }
 
-      if(isSuccess || user){
-          navigate('/')
-        }
-        dispatch(reset())
+    if (isSuccess || user) {
+      navigate("/");
+    }
+    dispatch(reset());
   }, [isError, isSuccess, message, user, dispatch, navigate]);
 
   const onChange = (e) => {
@@ -44,15 +43,16 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-      const userData = {
-        username,
-        password,
-      };
-      dispatch(login(userData));
-    
+    const userData = {
+      username,
+      password,
+    };
+    dispatch(login(userData));
   };
 
-  return ( isLoading ? <Spinner/> :
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div>
       <section className="heading">
         <h1>
@@ -91,6 +91,9 @@ function Login() {
             <button className="btn btn-block">Login</button>
           </div>
         </form>
+        <div className="form-group">
+          <a href="http://localhost:8080/oauth2/authorization/google" className="btn btn-block btn-black" >Continue with google</a>
+        </div>
       </section>
     </div>
   );

@@ -43,7 +43,7 @@ h3 {
 
 .container {
   width: 100%;
-  max-width: 960px;
+  max-width: 1560px;
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
@@ -76,7 +76,7 @@ h3 {
   grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   grid-auto-rows: min-content;
   grid-gap: 1rem;
-  margin-top: 5em;
+  margin-top: 1.5em;
 }
 
 
@@ -144,6 +144,11 @@ mark {
   border: none;
 }
 
+.btn-black {
+  background: black;
+  border: none;
+}
+
 .btn-block {
   width: 100%;
   margin-bottom: 20px;
@@ -173,10 +178,12 @@ mark {
 }
 
 /*menu item page*/
-.menu-item-page{
+.page{
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .menu-item-header{
@@ -184,12 +191,27 @@ mark {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  max-width: 1000px;
   padding: 10px 0;
 }
 
+.main-item-product{
+  align-items: flex-start;
+}
+
 .menu-item-product .grid{
-  margin-top: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+   --grid-layout-gap: 20px;
+   --grid-column-count: 2;
+   --grid-item--min-width: 20em;
+
+   --gap-count: calc(var(--grid-column-count) - 1);
+   --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+   --grid-item--max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+ 
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
+   grid-gap: var(--grid-layout-gap);
+   grid-template-rows: min-content;
 }
 
 
@@ -289,6 +311,16 @@ mark {
   border-color: #000 transparent #555 transparent;
   border-radius: 50%;
   animation: spin 1.2s linear infinite;
+}
+
+/*Checkout*/
+.checkout-resume{
+  border: #000 solid 1px;
+  min-height: 500px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @keyframes spin {

@@ -2,6 +2,7 @@ package com.oumana.security;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,9 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.oumana.repository.UserRepo;
 
@@ -24,11 +22,8 @@ import com.oumana.repository.UserRepo;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private final UserRepo userRepo;
-	
-	public SecurityConfig(UserRepo userRepo) {
-		this.userRepo = userRepo;
-	}
+	@Autowired
+	private UserRepo userRepo;
 	
 	@Bean
 	JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -74,7 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/api/menu-items/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/menu-items").hasRole("ADMIN")
 			.antMatchers("/api/menu-items/**/item-reviews").permitAll()
-			.anyRequest().authenticated();
+			.antMatchers(HttpMethod.GET, "/api/order").hasRole("ADMIN")
+			.antMatchers("/oauth2/**")
+            .permitAll()
+			.anyRequest()
+			.authenticated();
 		
 		//JWT token filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

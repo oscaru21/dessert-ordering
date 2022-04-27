@@ -1,8 +1,11 @@
-import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaSignInAlt, FaSignOutAlt, FaUser, FaShoppingCart } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import {reset as cartReset} from '../features/cart/cartSlice'
 import { Link, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
+import Cart from "./Cart";
 import "./Header.css";
+import NavItem from "./NavItem";
 
 function Header() {
   const navigate = useNavigate();
@@ -12,6 +15,7 @@ function Header() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
+    dispatch(cartReset())
     navigate("/");
   };
 
@@ -37,6 +41,14 @@ function Header() {
                 <FaSignOutAlt /> Logout
               </button>
             </li>
+            {/* {!user.isAdmin && 
+            <NavItem icon={<FaShoppingCart/>}>
+              <Cart/>
+            </NavItem>
+            } */}
+            <NavItem icon={<FaShoppingCart/>}>
+              <Cart/>
+            </NavItem>
           </>
         ) : (
           <>
