@@ -23,31 +23,4 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
-	
-	@PostMapping("/register")
-	public ResponseEntity<UserDto> register(@RequestBody User user) {
-		User registeredUser = userService.registerUser(user);
-		UserDto response = new UserDto();
-		response.setEmail(registeredUser.getEmail());
-		response.setName(registeredUser.getName());
-		response.setUsername(registeredUser.getUsername());
-		response.setToken(jwtTokenProvider.generateToken(registeredUser.getId()));
-		response.setIsAdmin(registeredUser.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).contains("ROLE_ADMIN"));
-		return new ResponseEntity<UserDto>(response, HttpStatus.CREATED);
-	}
-	
-	@PostMapping("/login")
-	public ResponseEntity<UserDto> login(@RequestBody User user) {
-		User loggedUser = userService.loginUser(user);
-		UserDto response = new UserDto();
-		response.setEmail(loggedUser.getEmail());
-		response.setName(loggedUser.getName());
-		response.setUsername(loggedUser.getUsername());
-		response.setToken(jwtTokenProvider.generateToken(loggedUser.getId()));
-		response.setIsAdmin(loggedUser.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).contains("ROLE_ADMIN"));
-		return new ResponseEntity<UserDto>(response, HttpStatus.OK);
-	}
-
 }

@@ -1,5 +1,6 @@
 package com.oumana.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class OrderController {
 	
 	@GetMapping
 	public ResponseEntity<List<Order>> getAll(){
-		return null;
+		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
 	}
 	
 	@PostMapping
