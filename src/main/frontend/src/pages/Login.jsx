@@ -91,9 +91,7 @@ function Login() {
             <button className="btn btn-block">Login</button>
           </div>
         </form>
-        <div className="form-group">
-          <a href="http://localhost:8080/oauth2/authorization/google" className="btn btn-block btn-black" >Continue with google</a>
-        </div>
+
       </section>
     </div>
   );

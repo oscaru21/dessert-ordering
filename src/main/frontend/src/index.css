@@ -320,6 +320,13 @@ mark {
   padding: 15px;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.checkout-element{
+  display: flex;
+  flex-grow: 1;
   justify-content: space-between;
 }
 

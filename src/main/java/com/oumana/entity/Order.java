@@ -2,6 +2,7 @@ package com.oumana.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,13 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "orders")
-@JsonIgnoreProperties({"user"})
+@JsonIgnoreProperties({"user", "orderItems"})
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +48,20 @@ public class Order {
 	@JoinColumn(name = "fk_user_id", nullable = false)
 	private User user;
 	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+	private Set<OrderItem> orderItems;
+	
+
 	public Order() {
 		super();
+	}
+	
+	public Set<OrderItem> getOrderItems() {
+		return orderItems;
+	}
+	
+	public void setOrderItems(Set<OrderItem> orderItems) {
+		this.orderItems = orderItems;
 	}
 	
 	public Order(Long id, String address, LocalDate creationDate, String note, BigDecimal price, Boolean isPaid,

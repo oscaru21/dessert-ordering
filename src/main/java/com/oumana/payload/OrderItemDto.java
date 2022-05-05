@@ -7,6 +7,7 @@ public class OrderItemDto {
 	private BigInteger quantity;
 	private Long menuItemId;
 	private Long orderId;
+	
 	public OrderItemDto(Long id, BigInteger quantity, Long menuItemId, Long orderId) {
 		super();
 		this.id = id;

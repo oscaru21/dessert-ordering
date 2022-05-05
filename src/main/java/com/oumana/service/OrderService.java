@@ -16,21 +16,36 @@ import com.oumana.repository.UserRepo;
 
 @Service
 public class OrderService {
-	
+
 	@Autowired
 	private OrderRepo orderRepo;
 	@Autowired
 	private OrderStatusRepo orderStatusRepo;
-	@Autowired
-	private UserRepo userRepo;
 
 	public Order createOrder(Order orderData) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		orderData.setUser(user);
-		OrderStatus orderStatus = orderStatusRepo.findByName("CREATED").orElseThrow(() -> new RuntimeException("Order status not valid"));
+		OrderStatus orderStatus = orderStatusRepo.findByName("CREATED")
+				.orElseThrow(() -> new RuntimeException("Order status not valid"));
 		orderData.setOrderStatus(orderStatus);
 		orderData.setCreationDate(LocalDate.now());
 		return orderRepo.save(orderData);
+	}
+
+	public Order getOrder(Long id) {
+		Order order = orderRepo.findById(id).get();
+		return updatePrice(order);
+	}
+
+	public Order updatePrice(Order order) {
+		order.setPrice(
+				new BigDecimal(
+						order.getOrderItems().stream().reduce(
+								0.0, (total,
+										element) -> total + element.getMenuItem().getPrice()
+												.multiply(new BigDecimal(element.getQuantity())).doubleValue(),
+								Double::sum)));
+		return orderRepo.save(order);
 	}
 
 }
