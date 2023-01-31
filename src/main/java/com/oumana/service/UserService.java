@@ -41,6 +41,7 @@ public class UserService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		User authenticatedUser = userRepo.findByUsername(user.getUsername()).get();
+		authenticatedUser.getRoles().stream().forEach(role -> System.out.println(role.getName()));
 		
 		return authenticatedUser;
 	}

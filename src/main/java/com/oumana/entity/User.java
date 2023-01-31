@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -43,10 +44,13 @@ public class User implements UserDetails{
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles", 
+    @JoinTable(name = "user_roles",  
     	joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
     	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
+	
+	//@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "user")
+	//private Set<ItemReview> itemReviews;
 	
 	public User() {
 		super();
@@ -61,6 +65,14 @@ public class User implements UserDetails{
 		this.roles = roles;
 	}
 	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
 	public Long getId() {
 		return id;
 	}

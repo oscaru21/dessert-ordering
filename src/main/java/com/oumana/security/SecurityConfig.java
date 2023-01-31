@@ -2,6 +2,7 @@ package com.oumana.security;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,17 +14,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.oumana.repository.UserRepo;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private final UserRepo userRepo;
+	@Autowired
+	private UserRepo userRepo;
 	
-	public SecurityConfig(UserRepo userRepo) {
-		this.userRepo = userRepo;
+	@Bean
+	JwtAuthenticationFilter jwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
 	}
 
 	@Bean
@@ -61,9 +64,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// login and register endpoints
 			.antMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-			.anyRequest().authenticated();
+			.antMatchers(HttpMethod.GET, "/api/menu-items").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/menu-items/**").permitAll()
+			.antMatchers(HttpMethod.POST, "/api/menu-items").hasRole("ADMIN")
+			.antMatchers("/api/menu-items/**/item-reviews").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/order").hasRole("ADMIN")
+			.antMatchers("/oauth2/**")
+            .permitAll()
+			.anyRequest()
+			.authenticated();
 		
 		//JWT token filter
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
 		
 	}
 
@@ -73,4 +86,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				username -> userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found")))
 				.passwordEncoder(passwordEncoder());
 	}
+	
 }

@@ -1,5 +1,7 @@
 package com.oumana.controller;
 
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +17,7 @@ import com.oumana.security.JwtTokenProvider;
 import com.oumana.service.UserService;
 
 @RestController
-@RequestMapping(path = "/api/users/", consumes = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
 public class UserController {
 	
 	@Autowired
@@ -24,7 +26,7 @@ public class UserController {
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	
-	@PostMapping("register")
+	@PostMapping("/register")
 	public ResponseEntity<UserDto> register(@RequestBody User user) {
 		User registeredUser = userService.registerUser(user);
 		UserDto response = new UserDto();
@@ -32,10 +34,11 @@ public class UserController {
 		response.setName(registeredUser.getName());
 		response.setUsername(registeredUser.getUsername());
 		response.setToken(jwtTokenProvider.generateToken(registeredUser.getId()));
+		response.setIsAdmin(registeredUser.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).contains("ROLE_ADMIN"));
 		return new ResponseEntity<UserDto>(response, HttpStatus.CREATED);
 	}
 	
-	@PostMapping("login")
+	@PostMapping("/login")
 	public ResponseEntity<UserDto> login(@RequestBody User user) {
 		User loggedUser = userService.loginUser(user);
 		UserDto response = new UserDto();
@@ -43,6 +46,7 @@ public class UserController {
 		response.setName(loggedUser.getName());
 		response.setUsername(loggedUser.getUsername());
 		response.setToken(jwtTokenProvider.generateToken(loggedUser.getId()));
+		response.setIsAdmin(loggedUser.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).contains("ROLE_ADMIN"));
 		return new ResponseEntity<UserDto>(response, HttpStatus.OK);
 	}
 
