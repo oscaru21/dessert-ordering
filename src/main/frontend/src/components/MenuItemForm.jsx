@@ -13,7 +13,7 @@ function MenuItemForm() {
         imgUrl: '',
         price: '',
     })
-    const [file, setFile] = useState(null)
+    // const [file, setFile] = useState(null)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -49,7 +49,7 @@ function MenuItemForm() {
         description,
         imgUrl,
         price,
-        file,
+        // file,
       };
 
       dispatch(createMenuItem(menuItemData));
@@ -115,7 +115,7 @@ function MenuItemForm() {
               required
             />
           </div>
-          <FileUploader onFileSelect={(file) => setFile(file)}/>
+          {/* <FileUploader onFileSelect={(file) => setFile(file)}/> */}
           
           <div className="form-group">
             <button className="btn btn-block">Submit</button>

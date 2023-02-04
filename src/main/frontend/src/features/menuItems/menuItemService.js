@@ -21,9 +21,9 @@ const createMenuItem = async (menuItemData, token) => {
         }
     }
 
-    const fd = new FormData()
-    fd.append("file", menuItemData.file, menuItemData.file)
-    fd.append("name", menuItemData.name)
+    // const fd = new FormData()
+    // fd.append("file", menuItemData.file, menuItemData.file)
+    // fd.append("name", menuItemData.name)
 
     const response = await axios.post(API_URL, menuItemData, config)
 
