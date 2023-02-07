@@ -51,7 +51,7 @@ function MenuItem() {
 
   const { imgUrl, name, description, price } = menuItem || {};
 
-  useEffect(() => {
+  useEffect((itemReviews) => {
     if (isError) {
       toast.error(message);
     }

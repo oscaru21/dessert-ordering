@@ -2,6 +2,18 @@
 
 This repository contains an implementation of a dessert ordering system built using Spring Boot and ReactJS. The system allows customers to place orders for desserts, view menu options, and track the status of their orders.
 
+## Preview:
+### Home Page
+![home](images/home.jpg)
+### Login Page
+![login](images/login.jpg)
+### Menu Item Page
+![item](images/item.jpg)
+### Checkout Page
+![checkout](images/checkout.jpg)
+### Admin Panel Page
+![admin](images/admin.jpg)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
